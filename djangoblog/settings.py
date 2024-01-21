@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-rugh$n7%4yr+2@_amb+149$zy969xx5+xwof2v1mv&&&oi+kgt
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.vercel.app']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -78,15 +78,22 @@ WSGI_APPLICATION = 'djangoblog.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": "django_db",
+        "NAME": "mysql",
         "USER": "root",
-        "PASSWORD": "120102",
-        "HOST": "127.0.0.1",
+        "PASSWORD": "gC0j6JUPglVfWrOJYxWohVJVbDjVP39Nqe9LMy/TmLI=",
+        "HOST": "mysql-46ui",
         "PORT": "3306",
     }
 }
 
-
+# "default": {
+#         "ENGINE": "django.db.backends.mysql",
+#         "NAME": "django_db",
+#         "USER": "root",
+#         "PASSWORD": "120102",
+#         "HOST": "127.0.0.1",
+#         "PORT": "3306",
+#     }
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
