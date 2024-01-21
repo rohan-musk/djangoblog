@@ -30,7 +30,7 @@
     <p class="post-title-name">{{ post.author }}</p><p class="post-title-date"> {{ post.pub_date }}</p>
   </div>
 <a href="{% url 'post_detail' pk=post.pk %}" class="post-header">{{ post.title }}</a>
-<p class="post-content">{{ post.content }}</p>
+<p class="post-content">{{ post.content|truncatechars:100 }}</p>
 <div class="post-footer">
   <div class="post-like">
     {% if request.user.is_authenticated%}
@@ -40,7 +40,7 @@
         <a href="{% url 'like_unlike_post' pk=post.pk %}">Like</a>
       {% endif %}
     {% endif %}
-    <p>{{ post.like_set.count }}</p>
+    <p>Likes:{{ post.like_set.count }}</p>
   </div>
   
   {% if request.user.is_authenticated%} {% if request.user == post.author%}
@@ -50,5 +50,22 @@
 </div>
 </div>
 {% endfor %} 
+</div>
+<div class="pagination">
+  <span class="step-links">
+      {% if blogposts.has_previous %}
+          <a href="?page=1">&laquo; first</a>
+          <a href="?page={{ blogposts.previous_page_number }}">previous</a>
+      {% endif %}
+
+      <span class="current">
+          Page {{ blogposts.number }} of {{ blogposts.paginator.num_pages }}.
+      </span>
+
+      {% if blogposts.has_next %}
+          <a href="?page={{ blogposts.next_page_number }}">next</a>
+          <a href="?page={{ blogposts.paginator.num_pages }}">last &raquo;</a>
+      {% endif %}
+  </span>
 </div>
 {% endblock %}

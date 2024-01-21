@@ -5,6 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 def register(request):
   if request.method == 'POST':
@@ -37,6 +38,16 @@ def custom_logout(request):
 
 def show_blogs(request):
   blogposts = BlogPost.objects.all()
+  page = request.GET.get('page', 1)
+    
+  paginator = Paginator(blogposts, 6)  
+
+  try:
+    blogposts = paginator.page(page)
+  except PageNotAnInteger:
+    blogposts = paginator.page(1)
+  except EmptyPage:
+    blogposts = paginator.page(paginator.num_pages)
   return render(request, 'blogs/blogpost_list.html', {'blogposts': blogposts})
 
 @login_required
