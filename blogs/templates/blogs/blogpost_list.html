@@ -1,0 +1,54 @@
+{% extends 'blogs/main.html'%}
+{% load custom_filters %}
+
+{% block content %}
+<div class="top">
+{% if request.user.is_authenticated%}
+<div class="top-bar">
+  <p class="top-bar-p">Hi {{request.user}}!</p>
+  <a class="top-bar-a" href="{% url 'logout' %}">Logout</a>
+</div>
+{%else%}
+<div class="top-bar">
+  <a class="top-bar-a" href="{%url 'custom_login'%}">Login</a>
+</div>
+{% endif %} 
+
+<h1 class="header">Django Blogs</h1>
+<p class="header-content">The one stop platform for all your tech blogs</p>
+</div>
+{% if request.user.is_authenticated%}
+<div class="blog-bar">
+  <p class="blog-bar-blog">Blogs</p>
+<a href="{% url 'create_blog' %}" class="create-blog-button">+</a>
+</div>
+{% endif %} 
+<div class="post-container">
+{% for post in blogposts %}
+<div class="post">
+  <div class="post-title">
+    <p class="post-title-name">{{ post.author }}</p><p class="post-title-date"> {{ post.pub_date }}</p>
+  </div>
+<a href="{% url 'post_detail' pk=post.pk %}" class="post-header">{{ post.title }}</a>
+<p class="post-content">{{ post.content }}</p>
+<div class="post-footer">
+  <div class="post-like">
+    {% if request.user.is_authenticated%}
+      {% if post|user_has_liked:request.user %}
+        <a href="{% url 'like_unlike_post' pk=post.pk %}">Unlike</a>
+      {% else %}
+        <a href="{% url 'like_unlike_post' pk=post.pk %}">Like</a>
+      {% endif %}
+    {% endif %}
+    <p>{{ post.like_set.count }}</p>
+  </div>
+  
+  {% if request.user.is_authenticated%} {% if request.user == post.author%}
+  <a class="post-update" href="{% url 'update_blog' pk=post.pk %}">Update</a>
+  <a class="post-delete" href="{% url 'delete_blog' pk=post.pk %}">Delete</a>
+  {% endif %} {% endif %}
+</div>
+</div>
+{% endfor %} 
+</div>
+{% endblock %}
