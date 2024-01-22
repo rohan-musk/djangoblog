@@ -7,6 +7,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
+#view to register user - not protected
 def register(request):
   if request.method == 'POST':
     form = UserCreationForm(request.POST)
@@ -18,6 +19,7 @@ def register(request):
     form = UserCreationForm()
   return render(request, 'users/register.html', {'form': form})
 
+#view to login user - not protected
 def custom_login(request):
   if request.method == 'POST':
     form = AuthenticationForm(request, data=request.POST)
@@ -32,10 +34,12 @@ def custom_login(request):
     form = AuthenticationForm()
   return render(request, 'users/login.html', {'form': form})
 
+#view to logout user - not protected
 def custom_logout(request):
   logout(request)
   return redirect('show_blogs')
 
+#view to display all posts - not protected
 def show_blogs(request):
   blogposts = BlogPost.objects.all()
   page = request.GET.get('page', 1)
@@ -50,6 +54,7 @@ def show_blogs(request):
     blogposts = paginator.page(paginator.num_pages)
   return render(request, 'blogs/blogpost_list.html', {'blogposts': blogposts})
 
+#view to write blogs - protected- needs login
 @login_required
 def create_blog(request):
   if request.method == 'POST':
@@ -63,6 +68,7 @@ def create_blog(request):
     form = PostForm()
   return render(request, 'blogs/create_blog.html', {'form': form})
 
+#view to delete blogs - protected- needs login
 @login_required
 def delete_blog(request, pk):
   blogpost = get_object_or_404(BlogPost, pk=pk)
@@ -74,6 +80,7 @@ def delete_blog(request, pk):
   else:
     return redirect('show_blogs')
 
+#view to update blogs - protected- needs login
 @login_required
 def update_blog(request, pk):
   blogpost = get_object_or_404(BlogPost, pk=pk)
@@ -89,6 +96,7 @@ def update_blog(request, pk):
   else:
     return redirect('show_blogs')
 
+#view to like and unlike blogs - protected- needs login
 @login_required
 def like_unlike_post(request, pk):
   post = get_object_or_404(BlogPost, pk=pk)
@@ -103,6 +111,7 @@ def like_unlike_post(request, pk):
 
   return redirect('show_blogs')
 
+#view to write comments on blogs - protected- needs login
 def post_detail(request, pk):
     post = get_object_or_404(BlogPost, pk=pk)
     comments = Comment.objects.filter(post=post, parent_comment__isnull=True)
