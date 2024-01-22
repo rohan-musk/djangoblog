@@ -113,18 +113,18 @@ def like_unlike_post(request, pk):
 
 #view to write comments on blogs - protected- needs login
 def post_detail(request, pk):
-    post = get_object_or_404(BlogPost, pk=pk)
-    comments = Comment.objects.filter(post=post, parent_comment__isnull=True)
-    
-    if request.method == 'POST':
-        comment_form = CommentForm(request.POST)
-        if comment_form.is_valid():
-            comment = comment_form.save(commit=False)
-            comment.post = post
-            comment.author = request.user
-            comment.save()
-            return redirect('post_detail', pk=pk)
-    else:
-        comment_form = CommentForm()
+  post = get_object_or_404(BlogPost, pk=pk)
+  comments = Comment.objects.filter(post=post, parent_comment__isnull=True)
+  
+  if request.method == 'POST':
+    comment_form = CommentForm(request.POST)
+    if comment_form.is_valid():
+      comment = comment_form.save(commit=False)
+      comment.post = post
+      comment.author = request.user
+      comment.save()
+      return redirect('post_detail', pk=pk)
+  else:
+      comment_form = CommentForm()
 
-    return render(request, 'blogs/post_detail.html', {'post': post, 'comments': comments, 'comment_form': comment_form})
+  return render(request, 'blogs/post_detail.html', {'post': post, 'comments': comments, 'comment_form': comment_form})
